@@ -70,25 +70,13 @@ export const logout = async (req, res) => {
         const { token } = req.body;
         if (!token) return res.status(400).json({ message: "This user is not valid!" });
 
-        // console.log(token);
-
         const user = await User.findOne({ token });
         if (!user) return res.status(400).json({ message: "No such user." });
-
-        // console.log(user);
 
         if (user.token === token) {
             console.log(`Tokens are same`);
 
-            // const newUser = new User({ username: user.username, email: user.email, password: user.password })
-            // await newUser.save();
-            // delete user.token;
-            // console.log(newUser);
-            // user.unset('token');
-            // await user.save();
-
-
-            await User.findOneAndUpdate(
+                await User.findOneAndUpdate(
                 { token: token },
                 { $unset: { token: 1 } },  // Removes the field completely
                 { new: true }              // Optional: returns updated doc

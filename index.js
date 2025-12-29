@@ -5,6 +5,7 @@ import cors from 'cors';
 dotenv.config();
 
 import authRoutes from "./route/auth.route.js";
+import { foodInit } from './initDB.js';
 
 const app = express();
 const PORT = process.env.PORT;
@@ -23,3 +24,9 @@ app.listen(PORT, async () => {
 
 
 app.use(authRoutes);
+
+
+
+// for DB initialization
+
+app.get("/foodInit", foodInit)
