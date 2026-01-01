@@ -76,7 +76,7 @@ export const logout = async (req, res) => {
         if (user.token === token) {
             console.log(`Tokens are same`);
 
-                await User.findOneAndUpdate(
+            await User.findOneAndUpdate(
                 { token: token },
                 { $unset: { token: 1 } },  // Removes the field completely
                 { new: true }              // Optional: returns updated doc

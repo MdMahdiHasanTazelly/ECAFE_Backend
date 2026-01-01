@@ -19,7 +19,7 @@ const userSchema = new Schema({
     token: {
         type: String,
     },
-    orders: [{
+    favourites: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Food",
         default: [],
