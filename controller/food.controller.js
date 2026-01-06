@@ -73,7 +73,7 @@ export const addToFavourite = async (req, res) => {
         await user.save();
 
 
-        return res.status(200).json({ message: "Item added to favourite." });
+        return res.status(200).json({ message: "Item added to favourite.", favourites: user.favourites });
 
 
     } catch (error) {
@@ -120,7 +120,7 @@ export const updateQuantity = async (req, res) => {
             ownerId: user._id
         });
 
-        if (order.quantity === 0) return res.status(400).json({ message: "Quantity can't be updated!" });
+        if (order.quantity === 1 && quantity < 0) return res.status(400).json({ message: "Quantity can't be updated!" });
 
         await Order.updateOne(
             { ownerId: user._id, foodId: new mongoose.Types.ObjectId(itemId) },
@@ -156,6 +156,36 @@ export const removeFromCart = async (req, res) => {
         await Order.deleteOne({ _id: new mongoose.Types.ObjectId(orderId), ownerId: user._id });
 
         return res.status(200).json({ message: "Item is deleted!" });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+
+
+
+export const removeFromFavourite = async (req, res) => {
+    try {
+        const { token, foodId } = req.body;
+
+        if (!token || !foodId) return res.status(400).json({ message: "Invalide request!" });
+
+        const user = await User.findOneAndUpdate(
+            { token },
+            {
+                $pull: {
+                    favourites: new mongoose.Types.ObjectId(foodId),
+                },
+            },
+            { new: true }
+        );
+
+        if (!user) return res.status(400).json({ message: "No such user.", favourites: user.favourites });
+
+        return res.status(200).json({ message: "Removed from favourites", favourites: user.favourites });
+
 
     } catch (error) {
         console.log(error);
