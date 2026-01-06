@@ -74,7 +74,7 @@ export const logout = async (req, res) => {
         if (!user) return res.status(400).json({ message: "No such user." });
 
         if (user.token === token) {
-            console.log(`Tokens are same`);
+            // console.log(`Tokens are same`);
 
             await User.findOneAndUpdate(
                 { token: token },

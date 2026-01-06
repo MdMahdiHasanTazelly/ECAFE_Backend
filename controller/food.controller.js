@@ -1,6 +1,7 @@
 import { Food } from '../model/food.model.js'
 import { Order } from '../model/order.model.js';
 import { User } from '../model/user.model.js';
+import mongoose from 'mongoose';
 
 
 
@@ -97,6 +98,43 @@ export const getOrders = async (req, res) => {
             .populate('foodId');
 
         return res.status(200).json(orders);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+
+
+
+export const updateQuantity = async (req, res) => {
+    try {
+
+        const { quantity, itemId, token } = req.body;
+
+        const user = await User.findOne({ token });
+
+        const order = await Order.findOne({
+            foodId: new mongoose.Types.ObjectId(itemId),
+            ownerId: user._id
+        });
+
+        // console.log(new mongoose.Types.ObjectId(itemId))
+
+        // console.log(quantity, "-----", itemId, "---------", token);
+
+        // console.log(order);
+
+        if (order.quantity === 0) return res.status(400).json({ message: "Quantity can't be updated!" });
+
+        await Order.updateOne(
+            { ownerId: user._id, foodId: new mongoose.Types.ObjectId(itemId) },
+            { $set: { quantity: order.quantity + quantity } }
+        );
+
+
+        return res.status(200).json({ message: "Quantity is updated!" });
 
     } catch (error) {
         console.log(error);
