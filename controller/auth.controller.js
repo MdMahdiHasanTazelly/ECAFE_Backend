@@ -3,6 +3,25 @@ import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 
 
+
+export const userProfile = async (req, res) => {
+    try {
+
+        const { userId } = req.params;
+        if (!userId) return res.status(400).json({ message: "No user id. Invalid request!" });
+
+        const user = await User.findOne({ _id: userId }).select("username email");
+        if (!user) return res.status(400).json({ message: "No such user!" });
+
+        return res.status(200).json(user);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+
 export const register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
