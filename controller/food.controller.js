@@ -120,12 +120,6 @@ export const updateQuantity = async (req, res) => {
             ownerId: user._id
         });
 
-        // console.log(new mongoose.Types.ObjectId(itemId))
-
-        // console.log(quantity, "-----", itemId, "---------", token);
-
-        // console.log(order);
-
         if (order.quantity === 0) return res.status(400).json({ message: "Quantity can't be updated!" });
 
         await Order.updateOne(
@@ -135,6 +129,33 @@ export const updateQuantity = async (req, res) => {
 
 
         return res.status(200).json({ message: "Quantity is updated!" });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+
+
+
+
+export const removeFromCart = async (req, res) => {
+    try {
+
+        const { token, orderId } = req.body;
+
+        if (!token || !orderId) return res.status(400).json({ message: "Invalid request!" });
+
+        const user = await User.findOne({ token });
+
+        const order = await Order.findOne(
+            { ownerId: user._id, _id: new mongoose.Types.ObjectId(orderId) },
+        );
+
+        await Order.deleteOne({ _id: new mongoose.Types.ObjectId(orderId), ownerId: user._id });
+
+        return res.status(200).json({ message: "Item is deleted!" });
 
     } catch (error) {
         console.log(error);
