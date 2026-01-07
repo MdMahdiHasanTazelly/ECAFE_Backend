@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 
 export const userProfile = async (req, res) => {
     try {
-
         const { userId } = req.params;
         if (!userId) return res.status(400).json({ message: "No user id. Invalid request!" });
 
@@ -61,7 +60,7 @@ export const login = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ message: "No such user. Register please!" });
 
-        const isMatch = bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: "Invalid credentials." });
 
         const token = jwt.sign(

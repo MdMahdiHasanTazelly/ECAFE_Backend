@@ -51,7 +51,7 @@ export const addToCart = async (req, res) => {
 
         await order.save();
 
-        return res.status(200).json({ message: "Order added to cart." });
+        return res.status(200).json({ message: "Order added to cart.", order });
 
     } catch (error) {
         console.log(error);
@@ -122,13 +122,13 @@ export const updateQuantity = async (req, res) => {
 
         if (order.quantity === 1 && quantity < 0) return res.status(400).json({ message: "Quantity can't be updated!" });
 
-        await Order.updateOne(
+        const updatedOrder = await Order.findOneAndUpdate(
             { ownerId: user._id, foodId: new mongoose.Types.ObjectId(itemId) },
-            { $set: { quantity: order.quantity + quantity } }
+            { $set: { quantity: order.quantity + quantity } },
+            { new: true }
         );
 
-
-        return res.status(200).json({ message: "Quantity is updated!" });
+        return res.status(200).json({ message: "Quantity is updated!", order: updatedOrder });
 
     } catch (error) {
         console.log(error);
