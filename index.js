@@ -12,7 +12,19 @@ import { foodInit } from './initDB.js';
 const app = express();
 const PORT = process.env.PORT;
 
-app.use(cors({ origin: "*" }));
+
+app.use(cors({
+    origin: [
+        "http://localhost:3000",
+        "https://ecafe-backend.netlify.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}));
+
+
+//app.use(cors({ origin: "*" }));
 
 app.use(json());
 
