@@ -38,6 +38,7 @@ const menuItems = [
         discountedPrice: 220,
         image: 'https://www.foodandwine.com/thmb/tM060YA0Fd0UALCmPQ-5gGWyBqA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Classic-Club-Sandwich-FT-RECIPE0523-99327c9c87214026b9419b949ee13a9c.jpg',
     },
+    
 ];
 
 
