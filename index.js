@@ -16,7 +16,7 @@ const PORT = process.env.PORT;
 app.use(cors({
     origin: [
         "http://localhost:3000",
-        "https://ecafe-backend.netlify.app"
+        "https://ecafefrontend.vercel.app"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
